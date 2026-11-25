@@ -16,16 +16,25 @@ def chunk(kind, data):
 
 def main():
     width, height = 3840, 96
-    # Match the previous CSS gradient, including its faint neutral overlay.
-    stops = ((9.5, 42.6, 58.1), (15.3, 29.0, 30.7), (15.3, 16.3, 11.6))
+    # A soft amber glow at the left fades through teal into the original dark end.
+    stops = (
+        (0.0, (48.5, 36.5, 24.5)),
+        (0.25, (9.5, 42.6, 58.1)),
+        (0.5, (15.3, 29.0, 30.7)),
+        (1.0, (15.3, 16.3, 11.6)),
+    )
     columns = []
     for x in range(width):
-        position = x / (width - 1) * 2
-        segment = min(int(position), 1)
-        fraction = position - segment
+        position = x / (width - 1)
+        segment = 0
+        while segment < len(stops) - 2 and position > stops[segment + 1][0]:
+            segment += 1
+        start, start_color = stops[segment]
+        end, end_color = stops[segment + 1]
+        fraction = (position - start) / (end - start)
         columns.append(tuple(
             a + (b - a) * fraction
-            for a, b in zip(stops[segment], stops[segment + 1])
+            for a, b in zip(start_color, end_color)
         ))
 
     rng = random.Random(17)

@@ -42,7 +42,7 @@ Copy the border/rounding settings from `stow/hypr/.config/hypr/hyprland.lua` int
 | Component | Details |
 | --- | --- |
 | Waybar | 15px outer margins, 3px corners, centered window title, player on the right, Monday-first calendar with ISO week numbers |
-| Bar background | Dithered teal-to-dark gradient; PNG is included so it works without regeneration |
+| Bar background | Dithered amber-to-teal-to-dark gradient; PNG is included so it works without regeneration |
 | Controls | Matching Rofi application launcher, player, Wi-Fi, Bluetooth, and confirmed power actions |
 | Hyprland | Orange active border, dim inactive border, 15px outer gaps, 5px inner gaps, 3px rounding, shared keybindings and animations |
 | Notifications / lock | Matching Dunst notification styling and Hyprlock screen; existing PAM authentication defaults |
