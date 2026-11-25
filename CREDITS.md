@@ -5,3 +5,4 @@
 - Neovim uses [Kanagawa Dragon](https://github.com/rebelot/kanagawa.nvim), managed separately in [my-nvim-config](https://github.com/a-tsvil/my-nvim-config).
 
 - `amber-district-boardformed.png` adds subtle vertical formwork grain and fine pores using a user-supplied concrete texture photograph as a material reference. The reference photograph is not redistributed; the previous smooth variant is retained. See the accompanying prompt record in the wallpaper directory.
+- `amber-district-concrete.png` refines the concrete finish to reduce the raised looping artifacts in the board-formed variant. The latest edit uses the same user-supplied material reference and a close-up defect reference; neither reference image is redistributed. The edit prompt is recorded alongside the wallpaper.
