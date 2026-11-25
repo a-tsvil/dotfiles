@@ -1,6 +1,6 @@
 # Charcoal Orange dotfiles
 
-An Arch Linux / Hyprland desktop with near-black surfaces, warm gray text, orange accents, and a teal brutalist cityscape wallpaper. Shared settings live in Git; monitor layouts and hardware overrides stay local to each computer.
+An Arch Linux / Hyprland desktop with near-black surfaces, warm gray text, orange accents, and a teal brutalist cityscape wallpaper with board-formed concrete texture. Shared settings live in Git; monitor layouts and hardware overrides stay local to each computer.
 
 Includes Waybar and its calendar/player/Wi-Fi/power controls, Rofi, Dunst, Hyprland, Hyprpaper, Hyprlock, Kitty, GTK/Qt/KDE colors, shell file-listing colors, and the Codex syntax theme.
 
