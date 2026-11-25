@@ -1,0 +1,10 @@
+-- Copy to ~/.config/hypr/hyprland.local.lua and edit for this machine.
+-- Shared config already supplies preferred/auto settings for other outputs.
+-- hl.monitor({ output = "eDP-1", mode = "2560x1600@120", position = "auto-right", scale = 1.6 })
+-- hl.monitor({ output = "DP-1", mode = "3840x2160@144", position = "auto-center-left", scale = 1.5 })
+-- hl.workspace_rule({ workspace = "3", monitor = "eDP-1" })
+-- Intel-specific examples; enable only if appropriate for this machine:
+-- hl.env("LIBVA_DRIVER_NAME", "iHD")
+-- hl.env("VDPAU_DRIVER", "va_gl")
+-- Optional extra GTK scaling (usually compositor scaling is sufficient):
+-- hl.env("GDK_SCALE", "2")

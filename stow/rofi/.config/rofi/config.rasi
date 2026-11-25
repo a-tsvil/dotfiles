@@ -1,0 +1,10 @@
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    icon-theme: "breeze";
+    terminal: "kitty";
+    matching: "normal";
+    window-match-fields: "title,app-id";
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+}

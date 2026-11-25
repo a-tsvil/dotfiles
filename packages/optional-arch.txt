@@ -1,0 +1,10 @@
+dolphin
+fastfetch
+brightnessctl
+blueman
+hyprsunset
+hyprshot
+slurp
+gpu-screen-recorder
+power-profiles-daemon
+nm-connection-editor

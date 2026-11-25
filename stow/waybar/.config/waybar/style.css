@@ -1,0 +1,260 @@
+/* Charcoal, warm gray, and orange, matching the reference desktop. */
+@define-color bar_bg rgba(10, 11, 11, 0.97);
+@define-color panel_bg #101111;
+@define-color text #c9c8c3;
+@define-color muted #777770;
+@define-color dim #464743;
+@define-color accent #ff6a00;
+@define-color amber #d49a32;
+@define-color urgent #e05243;
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrains Mono", "InputMono Nerd Font", "IosevkaTerm Nerd Font", "Noto Color Emoji", monospace;
+  font-size: 14px;
+  min-height: 0;
+}
+
+window#waybar {
+  background-color: @bar_bg;
+  /* Dithered before quantization to avoid bands without a grain overlay. */
+  background-image: url("themes/bar-gradient.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: @text;
+  border: 1px solid rgba(110, 110, 100, 0.18);
+  border-radius: 3px;
+}
+
+tooltip {
+  background: @panel_bg;
+  color: @text;
+  border: 1px solid #363731;
+  border-radius: 3px;
+}
+
+tooltip label {
+  padding: 7px 10px;
+}
+
+.modules-left {
+  margin-left: 5px;
+}
+
+.modules-right {
+  margin-right: 5px;
+}
+
+#custom-app_launcher,
+#custom-powermenu,
+#custom-updates,
+#custom-recorder,
+#window,
+#tray,
+#clock,
+#custom-calendar,
+#custom-language,
+#custom-mpris,
+#cpu,
+#memory,
+#temperature,
+#pulseaudio,
+#custom-network,
+#power-profiles-daemon,
+#custom-battery,
+#custom-lock {
+  background: transparent;
+  color: @text;
+  margin: 0;
+  padding: 0 7px;
+  min-height: 30px;
+  /* Draw the underline without taking space away from vertical centering. */
+  box-shadow: inset 0 -2px transparent;
+}
+
+#custom-powermenu {
+  color: @accent;
+  padding: 0 6px;
+  font-size: 16px;
+}
+
+#custom-app_launcher {
+  color: @accent;
+  padding: 0 11px;
+  font-size: 16px;
+}
+
+#custom-app_launcher label {
+  padding: 0;
+  margin: 0;
+}
+
+#custom-updates,
+#window,
+#custom-language,
+#power-profiles-daemon {
+  color: @muted;
+}
+
+#power-profiles-daemon {
+  padding-left: 8px;
+  padding-right: 12px;
+}
+
+/* Thin separators divide the continuous bar into small groups. */
+#custom-updates,
+#tray,
+#custom-language,
+#custom-calendar,
+#custom-battery {
+  border-left: 1px solid @dim;
+  margin: 6px 0;
+  min-height: 0;
+  padding-left: 9px;
+}
+
+#window {
+  padding-right: 10px;
+}
+
+#window image {
+  margin-right: 5px;
+}
+
+#workspaces {
+  background: transparent;
+  padding: 0 4px;
+}
+
+#workspaces button {
+  background: transparent;
+  color: @muted;
+  padding: 0 7px;
+  margin: 0;
+  min-width: 12px;
+  min-height: 30px;
+  border: none;
+  box-shadow: inset 0 -2px transparent;
+  text-shadow: none;
+}
+
+#workspaces button label {
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+}
+
+#workspaces button.empty {
+  color: @dim;
+}
+
+#workspaces button.hosting-monitor {
+  color: @text;
+}
+
+#workspaces button.active {
+  color: @amber;
+  box-shadow: inset 0 -2px @dim;
+}
+
+#workspaces button.hosting-monitor.active {
+  color: @accent;
+  box-shadow: inset 0 -2px @accent;
+  font-weight: bold;
+}
+
+#workspaces button.special {
+  color: @amber;
+}
+
+#workspaces button.urgent {
+  color: @urgent;
+  box-shadow: inset 0 -2px @urgent;
+}
+
+#custom-mpris {
+  padding: 0 12px;
+  font-weight: bold;
+}
+
+#custom-mpris.playing {
+  box-shadow: inset 0 -2px @accent;
+}
+
+#custom-mpris.paused,
+#custom-mpris.stopped {
+  color: @muted;
+}
+
+#cpu,
+#memory,
+#temperature {
+  color: @muted;
+  padding: 0 6px;
+}
+
+#custom-language {
+  min-width: 18px;
+}
+
+#clock.time {
+  color: @accent;
+  font-weight: bold;
+  padding-left: 4px;
+  padding-right: 9px;
+}
+
+#custom-calendar {
+  color: @muted;
+}
+
+#custom-recorder {
+  color: @urgent;
+}
+
+#pulseaudio.full:not(.muted),
+#custom-network.connected {
+  color: @accent;
+}
+
+#pulseaudio.muted,
+#custom-network.disconnected,
+#custom-network.disabled,
+#custom-battery.warning {
+  color: @amber;
+}
+
+#temperature.critical,
+#custom-battery.critical {
+  color: @urgent;
+}
+
+#custom-battery.charging,
+#custom-battery.plugged {
+  color: @text;
+}
+
+#custom-app_launcher:hover,
+#custom-powermenu:hover,
+#custom-updates:hover,
+#custom-recorder:hover,
+#workspaces button:hover,
+#window:hover,
+#custom-mpris:hover,
+#custom-language:hover,
+#clock:hover,
+#custom-calendar:hover,
+#tray:hover,
+#cpu:hover,
+#memory:hover,
+#temperature:hover,
+#pulseaudio:hover,
+#custom-network:hover,
+#power-profiles-daemon:hover,
+#custom-battery:hover,
+#custom-lock:hover {
+  background: #1b1c19;
+  color: @accent;
+  text-shadow: none;
+}

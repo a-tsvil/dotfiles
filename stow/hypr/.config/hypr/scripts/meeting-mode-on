@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+set -eu
+
+hyprctl eval '
+hl.config({
+  animations = { enabled = false },
+  decoration = {
+    blur = { enabled = false },
+    shadow = { enabled = false },
+  },
+})
+'

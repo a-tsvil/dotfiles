@@ -1,0 +1,90 @@
+/* Color overrides only: retain application layouts and widget behavior. */
+@define-color theme_bg_color #101111;
+@define-color theme_fg_color #c9c8c3;
+@define-color theme_base_color #0a0b0b;
+@define-color theme_text_color #c9c8c3;
+@define-color theme_selected_bg_color #e66000;
+@define-color theme_selected_fg_color #0a0b0b;
+@define-color theme_unfocused_selected_bg_color #34281e;
+@define-color theme_unfocused_selected_fg_color #c9c8c3;
+@define-color theme_unfocused_bg_color #101111;
+@define-color theme_unfocused_fg_color #777770;
+@define-color theme_unfocused_base_color #0a0b0b;
+@define-color theme_unfocused_text_color #c9c8c3;
+@define-color insensitive_bg_color #101111;
+@define-color insensitive_fg_color #777770;
+@define-color insensitive_base_color #0a0b0b;
+@define-color borders #363731;
+@define-color unfocused_borders #363731;
+@define-color warning_color #d49a32;
+@define-color error_color #e05243;
+@define-color success_color #a2ad7d;
+@define-color link_color #ff6a00;
+@define-color visited_link_color #b9a18d;
+@define-color accent_bg_color #e66000;
+@define-color accent_fg_color #0a0b0b;
+@define-color accent_color #ff6a00;
+
+window.background, dialog.background {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
+}
+
+headerbar {
+    background-color: @theme_bg_color;
+    background-image: none;
+    border-color: @borders;
+}
+
+.view, textview text, entry, spinbutton, list, listbox {
+    background-color: @theme_base_color;
+    color: @theme_text_color;
+}
+
+button {
+    background-color: #191b18;
+    background-image: none;
+    color: @theme_fg_color;
+    border-color: @borders;
+}
+
+button:hover {
+    background-color: #242620;
+}
+
+button:disabled {
+    background-color: @theme_bg_color;
+    color: @insensitive_fg_color;
+}
+
+popover.background, menu, .menu, notebook > stack {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
+}
+
+menuitem:hover {
+    background-color: #34281e;
+    color: @accent_color;
+}
+
+selection, row:selected, flowboxchild:selected, .view:selected {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}
+
+button.suggested-action, button:checked, switch:checked,
+check:checked, radio:checked, scale highlight, progressbar progress {
+    background-color: @accent_bg_color;
+    background-image: none;
+    border-color: @accent_bg_color;
+    color: @accent_fg_color;
+}
+
+entry:focus, button:focus {
+    border-color: @accent_bg_color;
+    outline-color: @accent_bg_color;
+}
+
+*:link {
+    color: @accent_color;
+}

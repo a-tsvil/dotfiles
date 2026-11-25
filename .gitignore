@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.log
+*.swp
+*.swo
+.DS_Store
+.env
+.env.*
+!.env.example
+local/
+backups/

@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -u
+
+theme="${HOME}/.config/waybar/themes/launcher.rasi"
+mode="${1:-drun}"
+
+case "${mode}" in
+  drun|run) ;;
+  *) mode="drun" ;;
+esac
+
+monitor_id=""
+
+cursor_json="$(hyprctl -j cursorpos 2>/dev/null | jq -c . 2>/dev/null || true)"
+monitors_json="$(hyprctl -j monitors 2>/dev/null | jq -c . 2>/dev/null || true)"
+
+if [[ -n "${cursor_json}" && -n "${monitors_json}" ]]; then
+  monitor_id="$(
+    jq -r --argjson pos "${cursor_json}" '
+      .[]
+      | select(
+          $pos.x >= .x and
+          $pos.x < (.x + .width) and
+          $pos.y >= .y and
+          $pos.y < (.y + .height)
+        )
+      | .id
+    ' <<< "${monitors_json}" | head -n1
+  )"
+fi
+
+rofi_args=(-show "${mode}" -show-icons -theme "${theme}"
+  -me-select-entry '' -me-accept-entry MousePrimary)
+
+if [[ -n "${monitor_id}" && "${monitor_id}" != "null" ]]; then
+  rofi_args+=(-m "${monitor_id}")
+fi
+
+exec rofi "${rofi_args[@]}"

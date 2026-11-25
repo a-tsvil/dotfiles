@@ -1,0 +1,20 @@
+@import "powermenu.rasi"
+
+textbox-prompt-colon {
+    str: "";
+}
+
+listview {
+    columns: 2;
+    lines: 1;
+}
+
+element-text {
+    horizontal-align: 0.5;
+}
+
+element selected.urgent {
+    background-color: #251715;
+    text-color: @urgent;
+    border-color: @urgent;
+}

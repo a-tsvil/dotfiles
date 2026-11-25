@@ -1,0 +1,80 @@
+/* Shared palette and selection styling with the player and Wi-Fi panels. */
+@import "controls.rasi"
+
+configuration {
+    show-icons: true;
+    display-drun: "Applications";
+    display-run: "Run";
+    drun-display-format: "{name}";
+}
+
+* {
+    font: "JetBrains Mono 16px";
+}
+
+window {
+    location: center;
+    anchor: center;
+    x-offset: 0px;
+    y-offset: 0px;
+    width: 620px;
+}
+
+mainbox {
+    padding: 20px;
+    spacing: 16px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    spacing: 12px;
+    padding: 2px 0 16px;
+    children: [ textbox-prompt-colon, prompt, entry ];
+}
+
+textbox-prompt-colon {
+    str: "";
+}
+
+prompt {
+    font: "JetBrains Mono Bold 16px";
+}
+
+entry {
+    placeholder: "Search…";
+}
+
+listview {
+    columns: 1;
+    lines: 6;
+    fixed-height: true;
+    fixed-columns: true;
+    spacing: 4px;
+}
+
+element {
+    orientation: horizontal;
+    spacing: 12px;
+    padding: 10px 12px;
+    children: [ element-icon, element-text ];
+}
+
+element-icon {
+    size: 28px;
+    background-color: transparent;
+    text-color: inherit;
+    vertical-align: 0.5;
+    cursor: inherit;
+}
+
+element-text {
+    highlight: bold underline;
+}
+
+error-message {
+    padding: 20px;
+    background-color: @background;
+    border: 1px;
+    border-color: @urgent;
+    border-radius: 3px;
+}

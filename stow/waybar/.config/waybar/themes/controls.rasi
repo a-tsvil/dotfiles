@@ -1,0 +1,140 @@
+/* Companion panels for Waybar's charcoal and orange theme. */
+configuration {
+    show-icons: false;
+}
+
+* {
+    background: #0a0b0b;
+    foreground: #c9c8c3;
+    muted: #777770;
+    separator: #363731;
+    accent: #ff6a00;
+    selection: #201811;
+    urgent: #e05243;
+
+    font: "JetBrains Mono 14px";
+    background-color: transparent;
+    text-color: @foreground;
+    border-color: @separator;
+    margin: 0;
+    padding: 0;
+}
+
+window {
+    location: northeast;
+    anchor: northeast;
+    x-offset: 15px;
+    /* Rofi starts below the reserved bar area; add the same 15px gap. */
+    y-offset: 15px;
+    width: 420px;
+    fullscreen: false;
+    transparency: "real";
+    background-color: @background;
+    border: 1px;
+    border-radius: 3px;
+    children: [ mainbox ];
+}
+
+mainbox {
+    orientation: vertical;
+    padding: 16px;
+    spacing: 12px;
+    children: [ inputbar, message, listview ];
+}
+
+inputbar {
+    spacing: 10px;
+    padding: 0 0 12px;
+    border: 0 0 1px;
+    children: [ textbox-prompt-colon, prompt, entry ];
+}
+
+textbox-prompt-colon {
+    expand: false;
+    width: 24px;
+    font: "JetBrainsMono Nerd Font 18px";
+    str: "󰍜";
+    text-color: @accent;
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+}
+
+prompt {
+    expand: false;
+    font: "JetBrains Mono Bold 14px";
+    text-color: @foreground;
+    vertical-align: 0.5;
+}
+
+entry {
+    expand: true;
+    text-color: @foreground;
+    placeholder: "Filter…";
+    placeholder-color: @muted;
+    vertical-align: 0.5;
+}
+
+message {
+    padding: 0 0 2px;
+}
+
+textbox {
+    text-color: @muted;
+    vertical-align: 0.5;
+    wrap: true;
+}
+
+listview {
+    columns: 1;
+    lines: 4;
+    layout: vertical;
+    spacing: 4px;
+    fixed-height: false;
+    dynamic: true;
+    scrollbar: false;
+    cycle: true;
+}
+
+element {
+    padding: 11px 12px;
+    spacing: 8px;
+    border: 0 0 0 2px;
+    border-color: transparent;
+    border-radius: 4px;
+    background-color: transparent;
+    text-color: @foreground;
+    cursor: pointer;
+    children: [ element-text ];
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: transparent;
+    text-color: @foreground;
+}
+
+element normal.active,
+element alternate.active {
+    text-color: @accent;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    text-color: @urgent;
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color: @selection;
+    text-color: @accent;
+    border-color: @accent;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    vertical-align: 0.5;
+    horizontal-align: 0.0;
+    cursor: inherit;
+}

@@ -1,0 +1,78 @@
+/* GTK 4 / libadwaita palette; no changes to application layout. */
+@define-color accent_bg_color #e66000;
+@define-color accent_fg_color #0a0b0b;
+@define-color accent_color #ff6a00;
+@define-color window_bg_color #0a0b0b;
+@define-color window_fg_color #c9c8c3;
+@define-color view_bg_color #101111;
+@define-color view_fg_color #c9c8c3;
+@define-color headerbar_bg_color #101111;
+@define-color headerbar_fg_color #c9c8c3;
+@define-color popover_bg_color #101111;
+@define-color popover_fg_color #c9c8c3;
+@define-color dialog_bg_color #101111;
+@define-color dialog_fg_color #c9c8c3;
+@define-color card_bg_color #191b18;
+@define-color card_fg_color #c9c8c3;
+@define-color borders #363731;
+@define-color warning_color #d49a32;
+@define-color error_color #e05243;
+@define-color success_color #a2ad7d;
+
+:root {
+    --accent-bg-color: #e66000;
+    --accent-fg-color: #0a0b0b;
+    --accent-color: #ff6a00;
+    --window-bg-color: #0a0b0b;
+    --window-fg-color: #c9c8c3;
+    --view-bg-color: #101111;
+    --view-fg-color: #c9c8c3;
+    --headerbar-bg-color: #101111;
+    --headerbar-fg-color: #c9c8c3;
+    --popover-bg-color: #101111;
+    --popover-fg-color: #c9c8c3;
+    --dialog-bg-color: #101111;
+    --dialog-fg-color: #c9c8c3;
+    --card-bg-color: #191b18;
+    --card-fg-color: #c9c8c3;
+    --border-color: rgba(201, 200, 195, 0.18);
+}
+
+window.background, dialog.background, popover.background {
+    background-color: @window_bg_color;
+    color: @window_fg_color;
+}
+
+.view, textview text, entry, spinbutton, list, listbox {
+    background-color: @view_bg_color;
+    color: @view_fg_color;
+}
+
+button {
+    background-color: #191b18;
+    background-image: none;
+    color: @window_fg_color;
+    border-color: @borders;
+}
+
+button:hover {
+    background-color: #242620;
+}
+
+button:disabled {
+    background-color: @window_bg_color;
+    color: #777770;
+}
+
+selection, row:selected, flowboxchild:selected, .view:selected {
+    background-color: @accent_bg_color;
+    color: @accent_fg_color;
+}
+
+button.suggested-action, button:checked, switch:checked,
+check:checked, radio:checked, scale highlight, progressbar progress {
+    background-color: @accent_bg_color;
+    background-image: none;
+    border-color: @accent_bg_color;
+    color: @accent_fg_color;
+}

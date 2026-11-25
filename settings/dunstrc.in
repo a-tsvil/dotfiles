@@ -1,0 +1,74 @@
+# For defaults and description of each option, see the link bellow
+# https://github.com/dunst-project/dunst/blob/master/dunstrc
+
+[global]
+# Display
+follow = mouse
+width = 420
+height = (0, 300)
+origin = top-right
+offset = (15, 15)
+indicate_hidden = yes
+notification_limit = 5
+gap_size = 12
+padding = 16
+horizontal_padding = 20
+frame_width = 1
+sort = no
+
+# Progress bar
+progress_bar_frame_width = 0
+progress_bar_corner_radius = 3
+
+# Colors
+foreground = "#c9c8c3"
+frame_color = "#363731"
+highlight = "#ff6a00"
+
+# Text
+# font = Noto Sans CJK JP 10
+font = JetBrains Mono 11
+markup = full
+format = "<small>%a</small>\n<b>%s</b>\n%b"
+alignment = left
+vertical_alignment = center
+show_age_threshold = -1
+hide_duplicate_count = false
+
+# Icon
+icon_position = left
+min_icon_size = 32
+max_icon_size = 48
+icon_theme = breeze
+icon_corner_radius = 4
+
+# Misc/Advanced
+dmenu = rofi -dmenu -p Notifications -theme "@HOME@/.config/waybar/themes/controls.rasi"
+corner_radius = 3
+
+# Mouse
+mouse_left_click = close_current
+mouse_middle_click = do_action, close_current
+mouse_right_click = close_all
+
+[urgency_low]
+background = "#0a0b0bfa"
+timeout = 3
+
+[urgency_normal]
+background = "#0a0b0bfa"
+timeout = 8
+
+[urgency_critical]
+background = "#251715fa"
+frame_color = "#e05243"
+highlight = "#e05243"
+timeout = 0
+
+# Rules
+[fullscreen_delay_everything]
+fullscreen = delay
+
+[fullscreen_show_critical]
+msg_urgency = critical
+fullscreen = show

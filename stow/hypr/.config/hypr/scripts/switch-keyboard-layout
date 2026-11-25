@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+set -eu
+
+# Pick the next layout from the keyboard Hyprland considers current, then set
+# that explicit layout on every keyboard so hot-plugged devices stay in sync.
+next_layout=$(
+  hyprctl devices -j |
+    jq -er '
+      first(.keyboards[] | select(.main)) |
+      ((.active_layout_index + 1) % (.layout | split(",") | length))
+    '
+)
+
+hyprctl switchxkblayout all "$next_layout" >/dev/null
+
+# Refresh the language indicator only after the layout change has completed.
+pkill -RTMIN+10 -x waybar >/dev/null 2>&1 || true

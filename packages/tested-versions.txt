@@ -1,0 +1,11 @@
+hyprland 0.57.2-2
+hyprpaper 0.8.5-5
+hyprlock 0.9.7-4
+waybar 0.16.0-3
+rofi 2.1.1-1
+dunst 1.13.2-3
+kitty 0.51.1-1
+qt6ct 0.11-10
+qt5ct 1.9-2
+kcolorscheme 6.32.0-1
+fastfetch 2.71.0-1
