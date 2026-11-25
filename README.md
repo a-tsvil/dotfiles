@@ -46,7 +46,7 @@ Copy the border/rounding settings from `stow/hypr/.config/hypr/hyprland.lua` int
 | Controls | Matching Rofi application launcher, player, Wi-Fi, Bluetooth, and confirmed power actions |
 | Hyprland | Orange active border, dim inactive border, 15px outer gaps, 5px inner gaps, 3px rounding, shared keybindings and animations |
 | Notifications / lock | Matching Dunst notification styling and Hyprlock screen; existing PAM authentication defaults |
-| Kitty | Charcoal Orange with distinct, higher-contrast ANSI hues, 86% background opacity, and IosevkaTerm Nerd Font at 14.5pt |
+| Kitty | Charcoal Orange with distinct, higher-contrast ANSI hues, 85% background opacity, and IosevkaTerm Nerd Font at 14.5pt |
 | File listings | Orange directories, green executables, underlined symlinks, amber archives, dim logs/backups; only a small shell snippet is sourced |
 | Fastfetch | Standard information modules; colors inherit Kitty's palette |
 | GTK / Qt / KDE | Appearance entries are merged into existing settings. The explicit KDE `UiSettings/ColorScheme` prevents Dolphin from falling back to Breeze Light |
