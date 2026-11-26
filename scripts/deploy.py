@@ -14,6 +14,11 @@ import sys
 import tempfile
 import tomllib
 
+if __package__:
+    from . import themes
+else:
+    import themes
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -70,27 +75,33 @@ def exists(path):
     return path.exists() or path.is_symlink()
 
 
-def deploy(home, selected, apply=False):
+def deploy(home, selected, apply=False, theme=None, colors=None, theme_only=False):
     home = home.expanduser().resolve()
     if not home.is_dir():
         raise ValueError('Target home directory does not exist: ' + str(home))
+    palette, preferences = themes.selection(home, theme, colors)
     operations = {}
+    modes = {}
+    generated = set()
     def relative(path):
         return str(path.relative_to(home))
     def read(path):
-        return path.read_text() if exists(path) else ''
+        return path.read_text() if path.exists() else ''
     def content(path, text):
         if not exists(path) or read(path) != text:
             operations[path] = ('write', text)
     def ini(target, source):
         path = home / target
-        fragment = (ROOT / 'settings' / source).read_text().replace('@HOME@', str(home))
+        if theme_only and not path.exists():
+            return
+        fragment = themes.render_file(ROOT / 'settings' / source, palette).replace('@HOME@', str(home))
         content(path, merge_ini(read(path), fragment))
     def once(target, source):
         path = home / target
         if not exists(path):
             content(path, (ROOT / 'examples' / source).read_text())
 
+    content(home / '.config/desktop/theme.toml', preferences)
     stow_packages = [name for name in selected if (ROOT / 'stow' / name).is_dir()]
     for name in stow_packages:
         package = ROOT / 'stow' / name
@@ -98,15 +109,26 @@ def deploy(home, selected, apply=False):
             if not source.is_file():
                 continue
             target = home / source.relative_to(package)
+            themed = source.suffix in {'.conf', '.colors', '.css', '.rasi', '.lua', '.tmTheme', '.py'} or source.name == 'dircolors'
+            themed = themed and bool(themes.TOKEN.search(source.read_text()))
+            if theme_only and (not themed or not target.exists()):
+                continue
+            if themed:
+                text = themes.render_file(source, palette)
+                if theme_only or text != source.read_text():
+                    generated.add(source.name)
+                    content(target, text)
+                    modes[target] = source.stat().st_mode & 0o777
+                    continue
             if not (target.is_symlink() and target.resolve() == source.resolve()):
                 operations[target] = ('link', str(source))
-    if 'hypr' in selected:
+    if 'hypr' in selected and not theme_only:
         once('.config/hypr/hyprland.local.lua', 'hyprland.local.lua')
         content(home / '.config/hypr/hyprpaper.conf', (ROOT / 'settings/hyprpaper.conf.in').read_text().replace('@HOME@', str(home)))
-    if 'waybar' in selected:
+    if 'waybar' in selected and not theme_only:
         once('.config/desktop/host.env', 'host.env')
         once('.config/desktop/waybar-host.jsonc', 'waybar-host.jsonc')
-    if 'gtk' in selected:
+    if 'gtk' in selected and not theme_only:
         for version in ('3.0', '4.0'):
             ini(f'.config/gtk-{version}/settings.ini', f'gtk-{version}.ini')
             path = home / f'.config/gtk-{version}/gtk.css'
@@ -119,11 +141,13 @@ def deploy(home, selected, apply=False):
     if 'kde' in selected:
         ini('.config/kdeglobals', 'kdeglobals.ini')
     if 'dunst' in selected:
-        content(home / '.config/dunst/dunstrc', (ROOT / 'settings/dunstrc.in').read_text().replace('@HOME@', str(home)))
-    if 'codex' in selected:
+        path = home / '.config/dunst/dunstrc'
+        if not theme_only or path.exists():
+            content(path, themes.render_file(ROOT / 'settings/dunstrc.in', palette).replace('@HOME@', str(home)))
+    if 'codex' in selected and not theme_only:
         path = home / '.codex/config.toml'
         content(path, codex_theme(read(path)))
-    if 'shell' in selected:
+    if 'shell' in selected and not theme_only:
         path = home / '.zshrc'
         text = read(path)
         line = '[ ! -r "$HOME/.config/shell/colors.sh" ] || . "$HOME/.config/shell/colors.sh"'
@@ -146,7 +170,7 @@ def deploy(home, selected, apply=False):
     if not apply:
         print('Preview only. Re-run with --apply to make these changes.')
         return None
-    if stow_packages and shutil.which('stow') is None:
+    if any(kind == 'link' for kind, _ in operations.values()) and shutil.which('stow') is None:
         raise ValueError('GNU Stow is required: sudo pacman -S stow')
     backup = home / '.local/state/dotfiles/backups' / datetime.now().strftime('%Y%m%d-%H%M%S-%f')
     backup.mkdir(parents=True, mode=0o700)
@@ -166,27 +190,32 @@ def deploy(home, selected, apply=False):
     try:
         for path, (kind, text) in operations.items():
             path.parent.mkdir(parents=True, exist_ok=True)
-            if kind == 'link':
-                if exists(path):
-                    path.unlink()
-                continue
-            mode = path.stat().st_mode & 0o777 if path.exists() else 0o600
+            mode = path.stat().st_mode & 0o777 if path.exists() else modes.get(path, 0o600)
             fd, temporary = tempfile.mkstemp(prefix='.dotfiles-', dir=path.parent)
             try:
-                with os.fdopen(fd, 'w') as stream:
-                    stream.write(text)
-                os.chmod(temporary, mode)
+                if kind == 'link':
+                    os.close(fd)
+                    os.unlink(temporary)
+                    os.symlink(os.path.relpath(text, path.parent), temporary)
+                else:
+                    with os.fdopen(fd, 'w') as stream:
+                        stream.write(text)
+                    os.chmod(temporary, mode)
                 os.replace(temporary, path)
             finally:
                 if os.path.exists(temporary):
                     os.unlink(temporary)
         if any(kind == 'link' for kind, _ in operations.values()):
-            subprocess.run(['stow', '--dir', str(ROOT / 'stow'), '--target', str(home), '--no-folding', '--restow', *stow_packages], check=True)
+            ignores = ['--ignore=' + re.escape(name) + '$' for name in sorted(generated)]
+            subprocess.run(['stow', '--dir', str(ROOT / 'stow'), '--target', str(home), '--no-folding', '--stow', *ignores, *stow_packages], check=True)
     except BaseException:
         restore(home, backup, quiet=True)
         raise
     print('Installed. Backup:', backup)
-    print('Review ~/.config/hypr/hyprland.local.lua before reloading Hyprland.')
+    print('Theme:', theme or tomllib.loads(preferences)['palette'])
+    if not theme_only:
+        print('Review', home / '.config/hypr/hyprland.local.lua', 'before reloading Hyprland.')
+    print('Reload Hyprland and restart themed applications to pick up color changes.')
     return backup
 
 
@@ -219,25 +248,38 @@ def restore(home, backup, quiet=False):
         print('Restored original files from', backup)
 
 
-def main():
+def main(theme_only=False):
     available = sorted([path.name for path in (ROOT / 'stow').iterdir() if path.is_dir()] + ['dunst'])
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description='Switch colors in installed components.' if theme_only else __doc__)
     parser.add_argument('--apply', action='store_true', help='Make changes; default is a read-only preview')
-    parser.add_argument('--home', type=Path, default=Path.home(), help='Target home (also useful for testing)')
+    parser.add_argument('--home', type=Path, default=Path.home(), help='Target home directory (default: $HOME); no fixed username or checkout path')
     parser.add_argument('--only', nargs='+', choices=available, help='Deploy only these components')
     parser.add_argument('--restore', type=Path, help='Restore files from a previous backup (requires --apply)')
+    parser.add_argument('--theme', choices=themes.PRESETS, help='Palette preset; resets local color overrides')
+    parser.add_argument('--accent', help='Accent color as #RRGGBB')
+    parser.add_argument('--background', help='Background color as #RRGGBB')
+    parser.add_argument('--foreground', help='Text color as #RRGGBB')
+    parser.add_argument('--list-themes', action='store_true', help='List available palettes and exit')
     args = parser.parse_args()
+    if args.list_themes:
+        print('\n'.join(themes.PRESETS))
+        return
     if args.restore:
         if not args.apply:
             parser.error('--restore requires --apply; it replaces the files listed in that backup')
         restore(args.home, args.restore)
     else:
-        deploy(args.home, args.only or available, args.apply)
+        colors = {role: getattr(args, role) for role in ('accent', 'background', 'foreground') if getattr(args, role) is not None}
+        deploy(args.home, args.only or available, args.apply, args.theme, colors, theme_only)
 
 
-if __name__ == '__main__':
+def cli(theme_only=False):
     try:
-        main()
+        main(theme_only)
     except (ValueError, OSError, subprocess.CalledProcessError, tomllib.TOMLDecodeError) as error:
         print('Deployment stopped:', error, file=sys.stderr)
         sys.exit(1)
+
+
+if __name__ == '__main__':
+    cli()

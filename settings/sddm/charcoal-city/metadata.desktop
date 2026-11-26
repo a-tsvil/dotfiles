@@ -1,0 +1,13 @@
+[SddmGreeterTheme]
+Name=Charcoal City
+Description=Gloomy city with swirling autumn leaves and dim pulsing tower lights
+Author=Charcoal Orange dotfiles
+Website=https://github.com/Keyitdev/sddm-astronaut-theme
+License=GPL-3.0-or-later
+Type=sddm-theme
+Version=1.0
+ConfigFile=theme.conf
+MainScript=Main.qml
+Theme-Id=charcoal-city
+Theme-API=2.0
+QtVersion=6

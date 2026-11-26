@@ -1,5 +1,7 @@
 # Assets and themes
 
+- Additional desktop palettes are adapted from [Catppuccin Mocha](https://github.com/catppuccin/palette), [Dracula](https://github.com/dracula/dracula-theme), [Gruvbox](https://github.com/morhetz/gruvbox), [Nord](https://www.nordtheme.com/docs/colors-and-palettes/), and [Tokyo Night](https://github.com/folke/tokyonight.nvim). Derived surface/selection colors and brighter muted text adapt these palettes to the shared desktop layouts; these are not official application ports.
+
 - Amber District wallpaper: AI-edited from a photograph by [Mohammadreza Charkhgard on Unsplash](https://unsplash.com/photos/building-window-glowing-with-warm-orange-light-at-night-C7V1NvzL2Sw). The distributed file is the final gray concrete / orange windows cityscape, refined with OpenAI's built-in image generation tool. [Unsplash license](https://unsplash.com/license).
 - Charcoal Orange palettes, UI styles, and dithered gradient were assembled for this desktop. `stow/waybar/.config/waybar/scripts/generate-bar-gradient.py` rebuilds the gradient deterministically.
 - Neovim uses [Kanagawa Dragon](https://github.com/rebelot/kanagawa.nvim), managed separately in [my-nvim-config](https://github.com/a-tsvil/my-nvim-config).
@@ -9,4 +11,8 @@
 - `amber-district-clean-concrete.png` is the unpitted base variant: visible dots, pits and looping surface artifacts have been removed, leaving smooth matte concrete and the structural panel seams. Generated with the built-in image tool; its exact edit prompt is recorded alongside the image. Earlier variants are retained.
 - `amber-district-weathered.png` is the weathered base variant. It adds soft rain-runoff stains, edge grime and mineral discoloration to the clean concrete base, preserving its unpitted finish. Generated with the built-in image tool; the exact prompt is recorded alongside it.
 - `amber-district-weathered-dim-lights.png` is the dim-rooftop-light variant. It preserves the weathered scene and dims the four red rooftop markers to faint pinpoints without bright halos. Generated with the built-in image tool; the exact edit prompt is recorded alongside it.
-- `amber-district-window-refined.png` is the current wallpaper. It cleans up the foreground orange window frame and its lighting, retaining the weathered concrete and dim rooftop markers. Generated with the built-in image tool; the exact edit prompt is recorded alongside it.
+- `amber-district-window-refined.png` cleans up the foreground orange window frame and its lighting, retaining the weathered concrete and dim rooftop markers. Generated with the built-in image tool; the exact edit prompt is recorded alongside it.
+- `amber-district-clear.png` is an earlier wallpaper variant. It reduces window bloom and generated texture artifacts and sharpens architectural details while preserving the teal/orange scene. Edited with the built-in image tool in two passes; prompts are recorded alongside it.
+
+- `settings/sddm/charcoal-city` uses the Sakura login layout from [Keyitdev's SDDM Astronaut theme](https://github.com/Keyitdev/sddm-astronaut-theme), licensed GPL-3.0-or-later. Its background is an unchanged copy of the pixel-art desktop wallpaper; QML adds the animations. See `settings/sddm/ARTWORK.md`.
+- `amber-district-hl2-pixel.png` is the shared desktop, lock and login wallpaper. It renders the refined cityscape in fine pixel art, preserving the original composition. Edited with the built-in image tool; its prompt is recorded alongside it.

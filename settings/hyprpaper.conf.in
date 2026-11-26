@@ -1,8 +1,8 @@
 # Empty monitor selects the fallback wallpaper for every output.
-preload = @HOME@/.config/waybar/wallpapers/amber-district-window-refined.png
+preload = @HOME@/.config/waybar/wallpapers/amber-district-hl2-pixel.png
 
 wallpaper {
     monitor =
-    path = @HOME@/.config/waybar/wallpapers/amber-district-window-refined.png
+    path = @HOME@/.config/waybar/wallpapers/amber-district-hl2-pixel.png
 }
 splash = false

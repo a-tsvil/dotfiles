@@ -1,4 +1,4 @@
--- Lua Hyprland config generated from hyprland.conf.
+-- Shared Hyprland defaults; put machine preferences in hyprland.local.lua.
 -- See https://wiki.hypr.land/configuring/
 
 ----------------
@@ -13,7 +13,7 @@ hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" 
 
 local terminal = "kitty"
 local fileManager = "dolphin"
-local menu = "~/.config/hypr/scripts/rofi-current-workspace run"
+local menu = [["$HOME/.config/hypr/scripts/rofi-current-workspace" run]]
 local mainMod = "SUPER"
 
 ----------------
@@ -21,7 +21,7 @@ local mainMod = "SUPER"
 ----------------
 
 hl.on("hyprland.start", function()
-  hl.exec_cmd("/usr/bin/dunst")
+  hl.exec_cmd("dunst")
   hl.exec_cmd("waybar")
   hl.exec_cmd("blueman-applet")
   hl.exec_cmd("hyprpaper")
@@ -113,9 +113,6 @@ hl.config({
     },
   },
 
-  xwayland = {
-    force_zero_scaling = true,
-  },
 })
 
 ----------------
@@ -150,19 +147,6 @@ hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" 
 -- Workspaces and rules
 ----------------
 
-hl.workspace_rule({ workspace = "5", layout = "master" })
-
-hl.window_rule({
-  name = "fixslack",
-  match = { class = "Slack" },
-  no_initial_focus = true,
-})
-
-hl.window_rule({
-  match = { workspace = "7" },
-  float = true,
-})
-
 hl.window_rule({
   name = "suppress-maximize-events",
   match = { class = ".*" },
@@ -182,12 +166,6 @@ hl.window_rule({
   no_focus = true,
 })
 
-hl.window_rule({
-  name = "fixintellij",
-  match = { class = "jetbrains-idea" },
-  no_initial_focus = true,
-})
-
 hl.layer_rule({
   match = { namespace = "rofi" },
   blur = true,
@@ -205,10 +183,10 @@ hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
 ----------------
 
 -- Keep every connected keyboard on the same layout.
-hl.bind("ALT + Shift_L", hl.dsp.exec_cmd("~/.config/hypr/scripts/switch-keyboard-layout"))
-hl.bind("ALT + Shift_R", hl.dsp.exec_cmd("~/.config/hypr/scripts/switch-keyboard-layout"))
-hl.bind("SHIFT + Alt_L", hl.dsp.exec_cmd("~/.config/hypr/scripts/switch-keyboard-layout"))
-hl.bind("SHIFT + Alt_R", hl.dsp.exec_cmd("~/.config/hypr/scripts/switch-keyboard-layout"))
+hl.bind("ALT + Shift_L", hl.dsp.exec_cmd([["$HOME/.config/hypr/scripts/switch-keyboard-layout"]]))
+hl.bind("ALT + Shift_R", hl.dsp.exec_cmd([["$HOME/.config/hypr/scripts/switch-keyboard-layout"]]))
+hl.bind("SHIFT + Alt_L", hl.dsp.exec_cmd([["$HOME/.config/hypr/scripts/switch-keyboard-layout"]]))
+hl.bind("SHIFT + Alt_R", hl.dsp.exec_cmd([["$HOME/.config/hypr/scripts/switch-keyboard-layout"]]))
 
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + C", hl.dsp.window.close())
@@ -219,7 +197,7 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + T", hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
-hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(terminal .. " nvim ~/.config/hypr/hyprland.lua"))
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(terminal .. [[ nvim "$HOME/.config/hypr/hyprland.local.lua"]]))
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("hyprctl reload"))
 
@@ -258,16 +236,16 @@ hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tr
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
 
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("~/.config/hypr/scripts/rofi-current-workspace drun"))
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd([["$HOME/.config/hypr/scripts/rofi-current-workspace" drun]]))
 
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"))
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.exec_cmd("hyprshot -m output --clipboard-only"))
-hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd("~/.config/hypr/scripts/meeting-mode-on"))
-hl.bind(mainMod .. " + CTRL + SHIFT + O", hl.dsp.exec_cmd("~/.config/hypr/scripts/meeting-mode-off"))
+hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd([["$HOME/.config/hypr/scripts/meeting-mode-on"]]))
+hl.bind(mainMod .. " + CTRL + SHIFT + O", hl.dsp.exec_cmd([["$HOME/.config/hypr/scripts/meeting-mode-off"]]))
 
 hl.bind(
   mainMod .. " + SHIFT + V",
-  hl.dsp.exec_cmd([[mkdir -p ~/Videos/recordings && gpu-screen-recorder -w "$(slurp -f '%wx%h+%x+%y')" -fallback-cpu-encoding yes -o ~/Videos/recordings/rec_$(date +%Y-%m-%d_%H-%M-%S).mp4]])
+  hl.dsp.exec_cmd([[mkdir -p "$HOME/Videos/recordings" && gpu-screen-recorder -w "$(slurp -f '%wx%h+%x+%y')" -fallback-cpu-encoding yes -o "$HOME/Videos/recordings/rec_$(date +%Y-%m-%d_%H-%M-%S).mp4"]])
 )
 hl.bind(mainMod .. " + SHIFT + C", hl.dsp.exec_cmd("pkill -INT -x gpu-screen-reco"))
 

@@ -9,10 +9,13 @@ import re
 import shutil
 import subprocess
 import sys
+import tomllib
+
+import themes
 
 ROOT = Path(__file__).resolve().parents[1]
 errors = []
-files = [p for area in ['stow', 'settings', 'examples', 'scripts', 'tests', 'packages'] for p in (ROOT / area).rglob('*') if p.is_file() and '__pycache__' not in p.parts]
+files = [p for area in ['stow', 'settings', 'themes', 'examples', 'scripts', 'tests', 'packages'] for p in (ROOT / area).rglob('*') if p.is_file() and '__pycache__' not in p.parts]
 for path in files:
     try:
         if path.suffix == '.png':
@@ -25,6 +28,8 @@ for path in files:
             json.loads(text)
         if path.suffix == '.py':
             ast.parse(text, filename=str(path))
+        if path.suffix == '.toml':
+            themes.validate(tomllib.loads(text))
         if path.suffix == '.tmTheme':
             plistlib.loads(path.read_bytes())
         if path.suffix == '.ini':
@@ -48,4 +53,4 @@ assert 'display' not in fastfetch and 'logo' not in fastfetch, 'Fastfetch must i
 if errors:
     print('\n'.join(errors), file=sys.stderr)
     sys.exit(1)
-print(f'Validated {len(files)} files: JSON, INI, Python, shell, Lua, theme plist, asset headers, portability, and credential-pattern checks.')
+print(f'Validated {len(files)} files: JSON, INI, palette TOML, Python, shell, Lua, theme plist, asset headers, portability, and credential-pattern checks.')

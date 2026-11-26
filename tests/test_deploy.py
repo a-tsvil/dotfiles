@@ -1,18 +1,18 @@
 import contextlib
-import importlib.util
 import io
+import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import tomllib
 import unittest
 from unittest.mock import patch
 
+from scripts import deploy
+
 ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location('deploy', ROOT / 'scripts/deploy.py')
-deploy = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(deploy)
 COMPONENTS = sorted([p.name for p in (ROOT / 'stow').iterdir() if p.is_dir()] + ['dunst'])
 
 
@@ -21,7 +21,8 @@ class DeploymentTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='dotfiles-test-')
         self.addCleanup(self.temp.cleanup)
-        self.home = Path(self.temp.name)
+        self.home = Path(self.temp.name) / 'home with spaces'
+        self.home.mkdir()
 
     def run_deploy(self, apply=True):
         with contextlib.redirect_stdout(io.StringIO()):
@@ -70,6 +71,39 @@ class DeploymentTests(unittest.TestCase):
         self.assertIn(str(self.home), (self.home / '.config/qt6ct/qt6ct.conf').read_text())
         self.assertIn('personal rules', (self.home / '.config/gtk-3.0/gtk.css').read_text())
         self.assertIsNone(self.run_deploy())
+
+    def test_cli_uses_home_and_allows_explicit_override(self):
+        other = Path(self.temp.name) / 'other home'
+        other.mkdir()
+        env = dict(os.environ, HOME=str(self.home))
+        command = [sys.executable, str(ROOT / 'scripts/deploy.py'), '--only', 'hypr', 'qt', 'dunst', '--apply']
+        for target, args in [(self.home, []), (other, ['--home', str(other)])]:
+            subprocess.run(command + args, env=env, check=True, capture_output=True, text=True)
+            for name in ['.config/hypr/hyprpaper.conf', '.config/qt5ct/qt5ct.conf',
+                         '.config/qt6ct/qt6ct.conf', '.config/dunst/dunstrc']:
+                text = (target / name).read_text()
+                self.assertIn(str(target) + '/.config/', text)
+                self.assertNotIn('@HOME@', text)
+            link = target / '.config/hypr/hyprland.lua'
+            self.assertTrue(link.is_symlink())
+            self.assertEqual(link.resolve(), ROOT / 'stow/hypr/.config/hypr/hyprland.lua')
+
+    def test_local_overrides_are_preserved(self):
+        overrides = {
+            '.config/hypr/hyprland.local.lua': 'hl.config({ input = { kb_layout = "de" } })\n',
+            '.config/desktop/host.env': 'NETWORK_INTERFACE=wlan9\nBATTERY_NAME=BAT3\n',
+            '.config/desktop/waybar-host.jsonc': '{"output": ["DP-2"]}\n',
+        }
+        for name, text in overrides.items():
+            path = self.home / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text)
+        self.run_deploy()
+        self.assertIsNone(self.run_deploy())
+        for name, text in overrides.items():
+            path = self.home / name
+            self.assertEqual(path.read_text(), text)
+            self.assertFalse(path.is_symlink())
 
     def test_restore_recovers_previous_files(self):
         originals = self.original_files()
